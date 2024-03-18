@@ -7,6 +7,8 @@ import com.cpg.mutuelle.repositories.ReclamationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -51,6 +53,7 @@ public class ReclamationServiceImpl implements IReclamationService {
             throw new DataNotFoundException("it's the same status");
         }else{
             reclamation.setStatut(newStatus);
+            reclamation.setDateUpdate(LocalDateTime.now());
             return reclamationRepository.save(reclamation);
         }
     }
