@@ -23,7 +23,7 @@ public class ReclamationController {
         return new ResponseEntity<>(reclamations, HttpStatus.OK);
     }
 
-    @GetMapping("/{adherentId}")
+    @GetMapping("/getByAdherentId/{adherentId}")
     public ResponseEntity<List<Reclamation>> getReclamationsByAdherent(@PathVariable("adherentId") Long adherentId) {
         List<Reclamation> reclamations = reclamationService.findByAdherent(adherentId);
         return new ResponseEntity<>(reclamations, HttpStatus.OK);
@@ -38,5 +38,20 @@ public class ReclamationController {
         Reclamation updatedReclamation = reclamationService.updateStatusReclamation(id, newStatus);
         return new ResponseEntity<>(updatedReclamation, HttpStatus.OK);
     }
+    @PostMapping("/add/{adherentId}")
+    public ResponseEntity<Reclamation> addReclamation(@PathVariable Long adherentId, @RequestBody Reclamation reclamation) {
+        Reclamation addedReclamation = reclamationService.addReclamation(adherentId, reclamation);
+        return new ResponseEntity<>(addedReclamation, HttpStatus.CREATED);
+    }
+    @PutMapping("/updateReclamation")
+    public ResponseEntity<Reclamation> updateReclamation(@RequestBody Reclamation newReclamation) {
+        Reclamation updatedReclamation = reclamationService.updateReclamation(newReclamation);
+        return new ResponseEntity<>(updatedReclamation, HttpStatus.OK);
+    }
 
+    @DeleteMapping("/deleteReclamation/{id}")
+    public ResponseEntity<Void> deleteReclamation(@PathVariable long id) {
+        reclamationService.deleteReclamation(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

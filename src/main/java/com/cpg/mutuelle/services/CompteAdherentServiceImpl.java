@@ -74,9 +74,14 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
         CompteAdherent adherent = cpAdherentRepository.findByMatricule(matricule)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with matricule: " + matricule));
         if (adherent.getRole().equals(Role.ADHERENT)) {
-
+            Adherent adherent1 = adherentRepository.findByMatricule(matricule).orElse(null);
+            if(adherent1 == null){
+                throw new DataNotFoundException("Adherent not found");
+            }
+            List<Reclamation> reclamations = reclamationService.findByAdherent(adherent1.getId());
             List<AyantsDroits> ayantsDroits = adherent.getAdherent().getAyantsDroits();
-            return new CpAdherentInfoDetails(adherent.getAdherent(), adherent, ayantsDroits,null);
+
+            return new CpAdherentInfoDetails(adherent.getAdherent(), adherent, ayantsDroits,reclamations);
         } else {
             List<Reclamation> reclamationsNonLues = reclamationService.reclamationsNonLues();
             return new CpAdherentInfoDetails(null, adherent, null,reclamationsNonLues);

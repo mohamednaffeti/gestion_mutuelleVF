@@ -11,5 +11,8 @@ public interface IReclamationService {
     List<Reclamation> reclamationsNonLues();
     Reclamation updateLuStatus(Long id);
     Reclamation updateStatusReclamation(Long id , StatusReclamation newStatus);
+    Reclamation addReclamation(Long id,Reclamation reclamation);
+    Reclamation updateReclamation(Reclamation newReclamation);
+    void deleteReclamation(long id);
 
 }
