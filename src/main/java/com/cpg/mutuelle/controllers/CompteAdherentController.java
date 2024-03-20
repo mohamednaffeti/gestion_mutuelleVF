@@ -50,7 +50,7 @@ public class CompteAdherentController {
     @PostMapping(path = "/addCpAdherent")
     //@PreAuthorize("hasAuthority('ADHERENT')")
     public ResponseEntity<CompteAdherent> addAdherent(@RequestBody CompteAdherent cpAdherent) {
-        cpAdherent.setRole(Role.ADHERENT);
+
         CompteAdherent createdCpAdherent = compteAdherentService.createCpAdherent(cpAdherent);
         return new ResponseEntity<>(createdCpAdherent, HttpStatus.CREATED);
     }

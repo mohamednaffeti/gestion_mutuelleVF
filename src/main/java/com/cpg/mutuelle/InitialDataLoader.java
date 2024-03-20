@@ -38,7 +38,7 @@ public class InitialDataLoader implements CommandLineRunner {
 
             admin.setRole(Role.ADMIN);
             admin.setDateDeNaissance(LocalDate.of(1975 , 1 , 1));
-            adherentService.createCpAdherent(admin);
+            adherentService.createAdmin(admin);
             System.out.println("Admin ajouté avec succès !");
         }
     }

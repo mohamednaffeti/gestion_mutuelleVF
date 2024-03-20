@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ICompteAdherentService {
     List<CompteAdherent> getAllACpAdherents();
+    CompteAdherent createAdmin(CompteAdherent admin);
     CompteAdherent createCpAdherent(CompteAdherent cpAdherent);
     CompteAdherent updateCpAdherent(CompteAdherent cpAdherent);
     void deleteCpAdherent(Long id);

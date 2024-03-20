@@ -39,16 +39,39 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
     }
 
     @Override
+    public CompteAdherent createAdmin(CompteAdherent admin) {
+        if (cpAdherentRepository.findByMatricule(admin.getMatricule()).isPresent()) {
+            throw new UserAlreadyExistException("Username already exist to another user");
+        } else if (adherentRepository.findByMatricule(admin.getMatricule()).isEmpty() && admin.getRole().equals(Role.ADHERENT)) {
+            throw new DataNotFoundException("Adhrent not found with this matricule");
+        }else{
+            return cpAdherentRepository.save(admin);
+        }
+    }
+
+    @Override
     public CompteAdherent createCpAdherent(CompteAdherent cpAdherent) {
+        cpAdherent.setRole(Role.ADHERENT);
         if (cpAdherentRepository.findByMatricule(cpAdherent.getMatricule()).isPresent()) {
             throw new UserAlreadyExistException("Username already exist to another user");
         } else if (adherentRepository.findByMatricule(cpAdherent.getMatricule()).isEmpty() && cpAdherent.getRole().equals(Role.ADHERENT)) {
             throw new DataNotFoundException("Adhrent not found with this matricule");
         }
+        Adherent adherent =adherentRepository.findByMatricule(cpAdherent.getMatricule()).orElse(null);
+        if(adherent== null){
+            throw new DataNotFoundException("Adhrent not found");
+        }else{
+            cpAdherent.setNom(adherent.getNom());
+            cpAdherent.setPrenom(adherent.getPrenom());
+            cpAdherent.setCin(adherent.getCin());
+            cpAdherent.setTel(adherent.getTel());
+            cpAdherent.setRole(Role.ADHERENT);
+            cpAdherent.setDateDeNaissance(adherent.getDateDeNaissance());
+            cpAdherent.setPassword(passwordEncoder.encode(cpAdherent.getPassword()));
+            cpAdherent.setAdherent(adherentRepository.findByMatricule(cpAdherent.getMatricule()).orElse(null));
+            return cpAdherentRepository.save(cpAdherent);
+        }
 
-        cpAdherent.setPassword(passwordEncoder.encode(cpAdherent.getPassword()));
-        cpAdherent.setAdherent(adherentRepository.findByMatricule(cpAdherent.getMatricule()).orElse(null));
-        return cpAdherentRepository.save(cpAdherent);
 
 
     }

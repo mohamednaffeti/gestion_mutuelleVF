@@ -23,6 +23,8 @@ public class CompteAdherent implements Serializable {
     private String password;
     private String cin;
     private String tel;
+    private String nom;
+    private String prenom;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateDeNaissance;
     @Enumerated(EnumType.STRING)
