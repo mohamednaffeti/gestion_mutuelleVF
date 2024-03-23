@@ -1,15 +1,11 @@
 package com.cpg.mutuelle;
 
 
-import com.cpg.mutuelle.entities.Adherent;
 import com.cpg.mutuelle.entities.CompteAdherent;
 import com.cpg.mutuelle.entities.enumerations.Gender;
 import com.cpg.mutuelle.entities.enumerations.Role;
-import com.cpg.mutuelle.repositories.AdherentRepository;
-import com.cpg.mutuelle.repositories.CompteAdhrentRepository;
-import com.cpg.mutuelle.services.IAdherentService;
+import com.cpg.mutuelle.repositories.CompteAdherentRepository;
 import com.cpg.mutuelle.services.ICompteAdherentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +16,9 @@ public class InitialDataLoader implements CommandLineRunner {
 
     private final ICompteAdherentService adherentService;
 
-    private final CompteAdhrentRepository adherentRepository;
+    private final CompteAdherentRepository adherentRepository;
 
-    public InitialDataLoader(ICompteAdherentService adherentService, CompteAdhrentRepository adherentRepository) {
+    public InitialDataLoader(ICompteAdherentService adherentService, CompteAdherentRepository adherentRepository) {
         this.adherentService = adherentService;
         this.adherentRepository = adherentRepository;
     }

@@ -2,13 +2,11 @@ package com.cpg.mutuelle.services;
 
 import com.cpg.mutuelle.detailsServices.CpAdherentInfoDetails;
 import com.cpg.mutuelle.entities.*;
-import com.cpg.mutuelle.entities.enumerations.Gender;
 import com.cpg.mutuelle.entities.enumerations.Role;
 import com.cpg.mutuelle.exceptions.DataNotFoundException;
 import com.cpg.mutuelle.exceptions.UserAlreadyExistException;
 import com.cpg.mutuelle.repositories.AdherentRepository;
-import com.cpg.mutuelle.repositories.CompteAdhrentRepository;
-import com.cpg.mutuelle.repositories.ReclamationRepository;
+import com.cpg.mutuelle.repositories.CompteAdherentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,14 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private CompteAdhrentRepository cpAdherentRepository;
+    private CompteAdherentRepository cpAdherentRepository;
     @Autowired
     private AdherentRepository adherentRepository;
     @Autowired
@@ -37,7 +34,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
     }
 
     @Override
-    public CompteAdherent createAdmin(CompteAdherent admin) {
+    public void createAdmin(CompteAdherent admin) {
         System.out.println(admin);
         if (cpAdherentRepository.findByMatricule(admin.getMatricule()).isPresent()) {
             throw new UserAlreadyExistException("Username already exist to another user");
@@ -45,7 +42,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
             throw new DataNotFoundException("Adhrent not found with this matricule");
         }else{
             admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-            return cpAdherentRepository.save(admin);
+            cpAdherentRepository.save(admin);
         }
     }
 
@@ -89,7 +86,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
     @Override
     public UserDetails loadUserByUsername(String matricule) throws UsernameNotFoundException {
         CompteAdherent adherent = cpAdherentRepository.findByMatricule(matricule)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with matricule: " + matricule));
+                .orElseThrow(() -> new DataNotFoundException("User not found with matricule: " + matricule));
         if (adherent.getRole().equals(Role.ADHERENT)) {
             Adherent adherent1 = adherentRepository.findByMatricule(matricule).orElse(null);
             if(adherent1 == null){

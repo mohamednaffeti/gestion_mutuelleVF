@@ -39,7 +39,7 @@ public class CompteAdherent implements Serializable {
     private String email;
     @OneToOne(fetch = FetchType.EAGER)
     private Adherent adherent;
-    @OneToMany(mappedBy = "compteAdherent",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "compteAdherent",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Actualite> actualites;
 

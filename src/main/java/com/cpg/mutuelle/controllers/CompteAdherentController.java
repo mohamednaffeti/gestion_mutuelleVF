@@ -9,7 +9,7 @@ import com.cpg.mutuelle.exceptions.DataNotFoundException;
 import com.cpg.mutuelle.exceptions.UserAlreadyExistException;
 import com.cpg.mutuelle.mailConfig.MailConfig;
 import com.cpg.mutuelle.repositories.AdherentRepository;
-import com.cpg.mutuelle.repositories.CompteAdhrentRepository;
+import com.cpg.mutuelle.repositories.CompteAdherentRepository;
 import com.cpg.mutuelle.services.ICompteAdherentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +37,7 @@ public class CompteAdherentController {
     @Autowired
     private AdherentRepository adherentRepository;
     @Autowired
-    private CompteAdhrentRepository cpAdherentRepository;
+    private CompteAdherentRepository cpAdherentRepository;
     @PostMapping("/login")
     public ResponseLogin Login (@RequestBody AuthRequest authRequest){
         UserDetails user = compteAdherentService.loadUserByUsername(authRequest.getMatricule());
