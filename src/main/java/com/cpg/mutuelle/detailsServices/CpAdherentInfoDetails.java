@@ -1,9 +1,6 @@
 package com.cpg.mutuelle.detailsServices;
 
-import com.cpg.mutuelle.entities.Adherent;
-import com.cpg.mutuelle.entities.AyantsDroits;
-import com.cpg.mutuelle.entities.CompteAdherent;
-import com.cpg.mutuelle.entities.Reclamation;
+import com.cpg.mutuelle.entities.*;
 import com.cpg.mutuelle.entities.enumerations.Role;
 import lombok.Data;
 import lombok.Getter;
@@ -29,14 +26,17 @@ public class CpAdherentInfoDetails implements UserDetails {
     @Getter
     private List<Reclamation> reclamations;
     @Getter
+    private List<Cotisation> cotisations;
+    @Getter
     CompteAdherent compteAdherent;
 
-    public CpAdherentInfoDetails(Adherent adherent, CompteAdherent compteAdherent, List<AyantsDroits> ayantsDroits,List<Reclamation> reclamations) {
+    public CpAdherentInfoDetails(Adherent adherent, CompteAdherent compteAdherent, List<AyantsDroits> ayantsDroits,List<Reclamation> reclamations,List<Cotisation> cotisations) {
         this.adherent = adherent;
         this.role = compteAdherent.getRole();
         this.ayantsDroits = ayantsDroits;
         this.compteAdherent = compteAdherent;
         this.reclamations=reclamations;
+        this.cotisations=cotisations;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

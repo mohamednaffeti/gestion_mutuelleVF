@@ -1,6 +1,7 @@
 package com.cpg.mutuelle.entities;
 
 import com.cpg.mutuelle.entities.enumerations.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -32,6 +34,9 @@ public class CompteAdherent implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     private Adherent adherent;
+    @OneToMany(mappedBy = "compteAdherent",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Actualite> actualites;
 
 
 }

@@ -24,7 +24,32 @@ public class AdherentServiceImpl implements IAdherentService {
 
     @Override
     public Adherent updateAdherent(Adherent adherent) {
-        return null;
+        Optional<Adherent> existingAdherentOptional = adherentRepository.findById(adherent.getId());
+
+        if (existingAdherentOptional.isPresent()) {
+            Adherent existingAdherent = existingAdherentOptional.get();
+
+
+            existingAdherent.setNom(adherent.getNom());
+            existingAdherent.setPrenom(adherent.getPrenom());
+            existingAdherent.setMatricule(adherent.getMatricule());
+            existingAdherent.setMail(adherent.getMail());
+            existingAdherent.setTel(adherent.getTel());
+            existingAdherent.setType(adherent.getType());
+            existingAdherent.setEtatCivil(adherent.getEtatCivil());
+            existingAdherent.setSexe(adherent.getSexe());
+            existingAdherent.setAssiette(adherent.getAssiette());
+            existingAdherent.setDateDepartRetraite(adherent.getDateDepartRetraite());
+            existingAdherent.setSalaireCNSS(adherent.getSalaireCNSS());
+            existingAdherent.setDateDeNaissance(adherent.getDateDeNaissance());
+            existingAdherent.setCin(adherent.getCin());
+
+
+
+            return adherentRepository.save(existingAdherent);
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.cpg.mutuelle.services;
 
 import com.cpg.mutuelle.detailsServices.CpAdherentInfoDetails;
-import com.cpg.mutuelle.entities.Adherent;
-import com.cpg.mutuelle.entities.AyantsDroits;
-import com.cpg.mutuelle.entities.CompteAdherent;
-import com.cpg.mutuelle.entities.Reclamation;
+import com.cpg.mutuelle.entities.*;
 import com.cpg.mutuelle.entities.enumerations.Role;
 import com.cpg.mutuelle.exceptions.DataNotFoundException;
 import com.cpg.mutuelle.exceptions.UserAlreadyExistException;
@@ -31,7 +28,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
     private AdherentRepository adherentRepository;
     @Autowired
     private IReclamationService reclamationService;
-
+    @Autowired ICotisationService cotisationService;
 
     @Override
     public List<CompteAdherent> getAllACpAdherents() {
@@ -40,11 +37,13 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
 
     @Override
     public CompteAdherent createAdmin(CompteAdherent admin) {
+        System.out.println(admin);
         if (cpAdherentRepository.findByMatricule(admin.getMatricule()).isPresent()) {
             throw new UserAlreadyExistException("Username already exist to another user");
         } else if (adherentRepository.findByMatricule(admin.getMatricule()).isEmpty() && admin.getRole().equals(Role.ADHERENT)) {
             throw new DataNotFoundException("Adhrent not found with this matricule");
         }else{
+            admin.setPassword(passwordEncoder.encode(admin.getPassword()));
             return cpAdherentRepository.save(admin);
         }
     }
@@ -76,10 +75,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
 
     }
 
-    @Override
-    public CompteAdherent updateCpAdherent(CompteAdherent cpAdherent) {
-        return null;
-    }
+
 
     @Override
     public void deleteCpAdherent(Long id) {
@@ -103,11 +99,11 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
             }
             List<Reclamation> reclamations = reclamationService.findByAdherent(adherent1.getId());
             List<AyantsDroits> ayantsDroits = adherent.getAdherent().getAyantsDroits();
-
-            return new CpAdherentInfoDetails(adherent.getAdherent(), adherent, ayantsDroits,reclamations);
+            List<Cotisation> cotisations = cotisationService.getByAdherent(adherent1.getId());
+            return new CpAdherentInfoDetails(adherent.getAdherent(), adherent, ayantsDroits,reclamations,cotisations);
         } else {
             List<Reclamation> reclamationsNonLues = reclamationService.reclamationsNonLues();
-            return new CpAdherentInfoDetails(null, adherent, null,reclamationsNonLues);
+            return new CpAdherentInfoDetails(null, adherent, null,reclamationsNonLues,null);
         }
 
     }

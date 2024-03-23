@@ -34,9 +34,8 @@ public class AdherentController {
         return new ResponseEntity<>(createdAdherent, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Adherent> updateAdherent(@PathVariable Long id, @RequestBody Adherent adherent) {
-        adherent.setId(id);
+    @PutMapping("/update")
+    public ResponseEntity<Adherent> updateAdherent(@RequestBody Adherent adherent) {
         Adherent updatedAdherent = adherentService.updateAdherent(adherent);
         return new ResponseEntity<>(updatedAdherent, HttpStatus.OK);
     }

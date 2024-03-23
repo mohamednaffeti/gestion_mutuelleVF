@@ -1,9 +1,6 @@
 package com.cpg.mutuelle.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +17,7 @@ public class Actualite implements Serializable {
     private Long id;
     private String titreActualite;
     private String contenuActualite;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name ="admin_id")
+    private CompteAdherent compteAdherent;
 }

@@ -20,7 +20,8 @@ public class Remboursement implements Serializable {
     private double montant;
     @Enumerated(value = EnumType.STRING)
     private MethodeRemboursement methodeRemboursement;
-
+    private String mois;
+    private String annee;
     @OneToOne(fetch = FetchType.EAGER)
     private DossierSoin dossierSoin;
 }

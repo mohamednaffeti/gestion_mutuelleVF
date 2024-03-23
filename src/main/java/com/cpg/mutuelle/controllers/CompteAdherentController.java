@@ -33,6 +33,8 @@ public class CompteAdherentController {
 
     @PostMapping("/login")
     public ResponseLogin Login (@RequestBody AuthRequest authRequest){
+        System.out.println(authRequest.getMatricule());
+        System.out.println(authRequest.getPassword());
         UserDetails user = compteAdherentService.loadUserByUsername(authRequest.getMatricule());
         if(!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())){
             throw new DataNotFoundException("Invalid Password");

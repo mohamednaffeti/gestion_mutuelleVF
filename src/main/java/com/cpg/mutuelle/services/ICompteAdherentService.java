@@ -10,7 +10,7 @@ public interface ICompteAdherentService {
     List<CompteAdherent> getAllACpAdherents();
     CompteAdherent createAdmin(CompteAdherent admin);
     CompteAdherent createCpAdherent(CompteAdherent cpAdherent);
-    CompteAdherent updateCpAdherent(CompteAdherent cpAdherent);
+
     void deleteCpAdherent(Long id);
     CompteAdherent findById(Long id);
     UserDetails loadUserByUsername(String matricule);

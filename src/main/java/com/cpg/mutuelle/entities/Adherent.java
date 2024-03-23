@@ -30,6 +30,10 @@ public class Adherent implements Serializable {
     private String type;
     private String etatCivil;
     private String sexe;
+    private double assiette;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateDepartRetraite;
+    private double salaireCNSS;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateDeNaissance;
     private String cin;
@@ -54,4 +58,9 @@ public class Adherent implements Serializable {
     @OneToMany(mappedBy = "adherent",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Reclamation> reclamations;
+
+    @OneToMany(mappedBy = "adherent",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Cotisation> cotisations;
+
 }
