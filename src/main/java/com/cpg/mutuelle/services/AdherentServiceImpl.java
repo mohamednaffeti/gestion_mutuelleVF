@@ -1,6 +1,7 @@
 package com.cpg.mutuelle.services;
 
 import com.cpg.mutuelle.entities.Adherent;
+import com.cpg.mutuelle.exceptions.DataNotFoundException;
 import com.cpg.mutuelle.repositories.AdherentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,12 @@ public class AdherentServiceImpl implements IAdherentService {
 
     @Override
     public Adherent createAdherent(Adherent adherent) {
-        return adherentRepository.save(adherent);
+        if(adherentRepository.findByMatricule(adherent.getMatricule()).isPresent()){
+            throw new DataNotFoundException("Matricule is already taken to another adherent");
+        }else{
+            return adherentRepository.save(adherent);
+        }
+
     }
 
     @Override
