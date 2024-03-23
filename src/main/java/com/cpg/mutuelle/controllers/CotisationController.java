@@ -25,14 +25,5 @@ public class CotisationController {
         List<Cotisation> cotisations = cotisationService.getByAdherent(idAdherent);
         return new ResponseEntity<>(cotisations, HttpStatus.OK);
     }
-    @GetMapping("/recent/{idAdherent}")
-    public ResponseEntity<Cotisation> getRecentCotisationByAdherent(@PathVariable Long idAdherent) {
-        Cotisation recentCotisation = cotisationService.getRecentById(idAdherent);
 
-        if (recentCotisation != null) {
-            return new ResponseEntity<>(recentCotisation, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 }

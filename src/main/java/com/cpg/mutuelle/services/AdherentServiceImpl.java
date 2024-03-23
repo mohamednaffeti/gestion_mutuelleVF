@@ -43,6 +43,7 @@ public class AdherentServiceImpl implements IAdherentService {
             existingAdherent.setSalaireCNSS(adherent.getSalaireCNSS());
             existingAdherent.setDateDeNaissance(adherent.getDateDeNaissance());
             existingAdherent.setCin(adherent.getCin());
+            existingAdherent.setSexe(adherent.getSexe());
 
 
 

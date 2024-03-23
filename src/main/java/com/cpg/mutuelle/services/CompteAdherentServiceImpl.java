@@ -2,6 +2,7 @@ package com.cpg.mutuelle.services;
 
 import com.cpg.mutuelle.detailsServices.CpAdherentInfoDetails;
 import com.cpg.mutuelle.entities.*;
+import com.cpg.mutuelle.entities.enumerations.Gender;
 import com.cpg.mutuelle.entities.enumerations.Role;
 import com.cpg.mutuelle.exceptions.DataNotFoundException;
 import com.cpg.mutuelle.exceptions.UserAlreadyExistException;
@@ -50,12 +51,7 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
 
     @Override
     public CompteAdherent createCpAdherent(CompteAdherent cpAdherent) {
-        cpAdherent.setRole(Role.ADHERENT);
-        if (cpAdherentRepository.findByMatricule(cpAdherent.getMatricule()).isPresent()) {
-            throw new UserAlreadyExistException("Username already exist to another user");
-        } else if (adherentRepository.findByMatricule(cpAdherent.getMatricule()).isEmpty() && cpAdherent.getRole().equals(Role.ADHERENT)) {
-            throw new DataNotFoundException("Adhrent not found with this matricule");
-        }
+
         Adherent adherent =adherentRepository.findByMatricule(cpAdherent.getMatricule()).orElse(null);
         if(adherent== null){
             throw new DataNotFoundException("Adhrent not found");
@@ -68,6 +64,8 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
             cpAdherent.setDateDeNaissance(adherent.getDateDeNaissance());
             cpAdherent.setPassword(passwordEncoder.encode(cpAdherent.getPassword()));
             cpAdherent.setAdherent(adherentRepository.findByMatricule(cpAdherent.getMatricule()).orElse(null));
+            cpAdherent.setSexe(adherent.getSexe());
+            cpAdherent.setEmail(adherent.getMail());
             return cpAdherentRepository.save(cpAdherent);
         }
 
@@ -107,4 +105,6 @@ public class CompteAdherentServiceImpl implements ICompteAdherentService, UserDe
         }
 
     }
+
+
 }

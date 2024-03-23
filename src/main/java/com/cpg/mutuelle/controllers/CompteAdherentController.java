@@ -2,12 +2,14 @@ package com.cpg.mutuelle.controllers;
 
 import com.cpg.mutuelle.detailsServices.CpAdherentInfoDetails;
 import com.cpg.mutuelle.detailsServices.JwtService;
+import com.cpg.mutuelle.entities.Adherent;
 import com.cpg.mutuelle.entities.CompteAdherent;
-import com.cpg.mutuelle.entities.dto.AuthRequest;
-import com.cpg.mutuelle.entities.dto.ResponseLogin;
-import com.cpg.mutuelle.entities.dto.CurrentUserDto;
-import com.cpg.mutuelle.entities.enumerations.Role;
+import com.cpg.mutuelle.entities.dto.*;
 import com.cpg.mutuelle.exceptions.DataNotFoundException;
+import com.cpg.mutuelle.exceptions.UserAlreadyExistException;
+import com.cpg.mutuelle.mailConfig.MailConfig;
+import com.cpg.mutuelle.repositories.AdherentRepository;
+import com.cpg.mutuelle.repositories.CompteAdhrentRepository;
 import com.cpg.mutuelle.services.ICompteAdherentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,11 +32,14 @@ public class CompteAdherentController {
     private JwtService jwtService;
     @Autowired
     PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private MailConfig emailService;
+    @Autowired
+    private AdherentRepository adherentRepository;
+    @Autowired
+    private CompteAdhrentRepository cpAdherentRepository;
     @PostMapping("/login")
     public ResponseLogin Login (@RequestBody AuthRequest authRequest){
-        System.out.println(authRequest.getMatricule());
-        System.out.println(authRequest.getPassword());
         UserDetails user = compteAdherentService.loadUserByUsername(authRequest.getMatricule());
         if(!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())){
             throw new DataNotFoundException("Invalid Password");
@@ -49,10 +54,34 @@ public class CompteAdherentController {
         }
 
     }
-    @PostMapping(path = "/addCpAdherent")
+    @GetMapping(path = "/verifyandsendEmail/{matricule}")
+    //@PreAuthorize("hasAuthority('ADHERENT')")
+    public ResponseEntity<String> addAdherent(@PathVariable String matricule) {
+        boolean valid;
+        String codeVerification;
+        Adherent adherent = adherentRepository.findByMatricule(matricule).orElse(null);
+        if (cpAdherentRepository.findByMatricule(matricule).isPresent()) {
+            throw new UserAlreadyExistException("Account already exist");
+        } else if (adherent==null) {
+            throw new DataNotFoundException("Adherent not found with this matricule");
+        }else{
+            FormatEmailDTO formatEmailDTO = FormatEmailDTO.builder().build();
+            formatEmailDTO.setTo(adherent.getMail());
+            formatEmailDTO.setSubject(EmainSubjectDTO.getSubject(0));
+            codeVerification = VerificationGenerator.generatePassword(12);
+            valid =emailService.sendVerificationEmail(formatEmailDTO,adherent.getNom(), adherent.getPrenom(),
+                    adherent.getMatricule(),adherent.getSexe().toString(),EmainSubjectDTO.getType(0),codeVerification);
+        }
+
+        return (valid) ? ResponseEntity.ok(codeVerification)
+                : ResponseEntity.ok("Mail not send ");
+
+
+        //return new ResponseEntity<>(createdCpAdherent, HttpStatus.CREATED);
+    }
+    @PostMapping(path = "/addCompte")
     //@PreAuthorize("hasAuthority('ADHERENT')")
     public ResponseEntity<CompteAdherent> addAdherent(@RequestBody CompteAdherent cpAdherent) {
-
         CompteAdherent createdCpAdherent = compteAdherentService.createCpAdherent(cpAdherent);
         return new ResponseEntity<>(createdCpAdherent, HttpStatus.CREATED);
     }

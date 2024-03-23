@@ -14,4 +14,6 @@ public interface ICompteAdherentService {
     void deleteCpAdherent(Long id);
     CompteAdherent findById(Long id);
     UserDetails loadUserByUsername(String matricule);
+
+
 }

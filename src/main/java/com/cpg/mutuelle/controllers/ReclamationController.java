@@ -35,6 +35,7 @@ public class ReclamationController {
     }
     @PutMapping("/updateStatusReclamation/{id}/{newStatus}")
     public ResponseEntity<Reclamation> updateStatusReclamation(@PathVariable Long id, @PathVariable StatusReclamation newStatus) {
+        this.updateLuStatus(id);
         Reclamation updatedReclamation = reclamationService.updateStatusReclamation(id, newStatus);
         return new ResponseEntity<>(updatedReclamation, HttpStatus.OK);
     }

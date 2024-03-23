@@ -1,12 +1,15 @@
 package com.cpg.mutuelle.entities;
 
+import com.cpg.mutuelle.entities.enumerations.Gender;
 import com.cpg.mutuelle.entities.enumerations.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -17,6 +20,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CompteAdherent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +35,8 @@ public class CompteAdherent implements Serializable {
     private LocalDate dateDeNaissance;
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    private Gender sexe;
+    private String email;
     @OneToOne(fetch = FetchType.EAGER)
     private Adherent adherent;
     @OneToMany(mappedBy = "compteAdherent",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
