@@ -2,6 +2,7 @@ package com.cpg.mutuelle.detailsServices;
 
 import com.cpg.mutuelle.entities.*;
 import com.cpg.mutuelle.entities.enumerations.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Getter
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CpAdherentInfoDetails implements UserDetails {
 
     @Getter

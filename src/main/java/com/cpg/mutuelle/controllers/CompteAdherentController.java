@@ -72,12 +72,8 @@ public class CompteAdherentController {
             valid =emailService.sendVerificationEmail(formatEmailDTO,adherent.getNom(), adherent.getPrenom(),
                     adherent.getMatricule(),adherent.getSexe().toString(),EmainSubjectDTO.getType(0),codeVerification);
         }
-
         return (valid) ? ResponseEntity.ok(codeVerification)
                 : ResponseEntity.ok("Mail not send ");
-
-
-        //return new ResponseEntity<>(createdCpAdherent, HttpStatus.CREATED);
     }
     @PostMapping(path = "/addCompte")
     //@PreAuthorize("hasAuthority('ADHERENT')")

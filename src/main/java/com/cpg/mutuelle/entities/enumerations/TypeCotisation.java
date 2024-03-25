@@ -3,5 +3,6 @@ package com.cpg.mutuelle.entities.enumerations;
 public enum TypeCotisation {
     COTISATION,
     AVANCE,
-    PECHE
+    PENALITE,
+    REGULARISATION
 }
