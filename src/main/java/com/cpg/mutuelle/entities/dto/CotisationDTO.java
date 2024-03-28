@@ -23,5 +23,6 @@ public class CotisationDTO {
     private int nbr_periode;
     private double montantCotisation;
     private double montantcnss;
+    private String indice;
 
 }

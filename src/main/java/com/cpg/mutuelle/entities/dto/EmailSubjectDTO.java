@@ -3,12 +3,12 @@ package com.cpg.mutuelle.entities.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmainSubjectDTO {
+public class EmailSubjectDTO {
     private static final List<String> emailSubjects = new ArrayList<>();
     private static final List<String> emailTypes = new ArrayList<>();
 
     static {
-        emailSubjects.add("Vérifation de votre nouveau compte");
+        emailSubjects.add("Vérification de votre nouveau compte");
     }
     static {
         emailTypes.add("AddingAccount");

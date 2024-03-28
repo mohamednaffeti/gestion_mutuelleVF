@@ -23,7 +23,6 @@ public class TraitementCotisationImpl implements ITraitementCotisation {
         Cotisation cotisation = cotisationService.getRecentById(idAdherent);
         CotisationDTO cotisationDTO = CotisationDTO.builder().build();
         int intervalle;
-
         if (cotisations.isEmpty()) {
             intervalle = calculerIntervalleMois(getDateRetraite(idAdherent));
             TypeCotisation typeCotisation = (intervalle <= 12) ?

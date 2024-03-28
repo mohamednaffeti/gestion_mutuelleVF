@@ -67,10 +67,10 @@ public class CompteAdherentController {
         }else{
             FormatEmailDTO formatEmailDTO = FormatEmailDTO.builder().build();
             formatEmailDTO.setTo(adherent.getMail());
-            formatEmailDTO.setSubject(EmainSubjectDTO.getSubject(0));
+            formatEmailDTO.setSubject(EmailSubjectDTO.getSubject(0));
             codeVerification = VerificationGenerator.generatePassword(12);
             valid =emailService.sendVerificationEmail(formatEmailDTO,adherent.getNom(), adherent.getPrenom(),
-                    adherent.getMatricule(),adherent.getSexe().toString(),EmainSubjectDTO.getType(0),codeVerification);
+                    adherent.getMatricule(),adherent.getSexe().toString(), EmailSubjectDTO.getType(0),codeVerification);
         }
         return (valid) ? ResponseEntity.ok(codeVerification)
                 : ResponseEntity.ok("Mail not send ");

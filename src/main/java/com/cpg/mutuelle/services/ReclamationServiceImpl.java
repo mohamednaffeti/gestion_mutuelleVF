@@ -39,8 +39,6 @@ public class ReclamationServiceImpl implements IReclamationService {
         Reclamation reclamation = reclamationRepository.findById(id).orElse(null);
         if(reclamation==null){
             throw new DataNotFoundException("reclamation not found");
-        }else if(reclamation.isLu()){
-            throw new DataNotFoundException("Reclamation already read");
         }else{
             reclamation.setLu(true);
             return reclamationRepository.save(reclamation);
