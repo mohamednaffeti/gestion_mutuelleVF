@@ -17,31 +17,41 @@ public class TraitementCotisationImpl implements ITraitementCotisation {
     @Autowired
     private IAdherentService adherentService;
 
+
     @Override
     public CotisationDTO getCotisation(Long idAdherent) {
         List<Cotisation> cotisations = cotisationService.getByAdherent(idAdherent);
         Cotisation cotisation = cotisationService.getRecentById(idAdherent);
         CotisationDTO cotisationDTO = CotisationDTO.builder().build();
-        int intervalle;
+        int intervalle = 0;
+
         if (cotisations.isEmpty()) {
             intervalle = calculerIntervalleMois(getDateRetraite(idAdherent));
-            TypeCotisation typeCotisation = (intervalle <= 12) ?
-                    (getMontantCNSS(idAdherent) == 0 ? TypeCotisation.AVANCE : TypeCotisation.COTISATION) :
-                    TypeCotisation.PENALITE;
             cotisationDTO.setMontantcnss(getMontantCNSS(idAdherent));
-            cotisationDTO.setTypeCotisation(typeCotisation);
-            cotisationDTO.setDateDebutComptage((typeCotisation == TypeCotisation.PENALITE) ? LocalDate.now().withDayOfMonth(1) : getDateRetraite(idAdherent));
-        } else if (cotisation.getCotisation().equals(TypeCotisation.AVANCE)) {
-            cotisationDTO.setMontantcnss(getMontantCNSS(idAdherent));
-            cotisationDTO.setTypeCotisation(TypeCotisation.REGULARISATION);
-            cotisationDTO.setDateDebutComptage(getDateRetraite(idAdherent));
+
+            if (intervalle <= 12) {
+                cotisationDTO.setTypeCotisation(getMontantCNSS(idAdherent) == 0 ? TypeCotisation.AVANCE : TypeCotisation.COTISATION);
+                cotisationDTO.setDateDebutComptage(getDateRetraite(idAdherent));
+                cotisationDTO.setIndice("6");
+            } else {
+                cotisationDTO.setTypeCotisation(TypeCotisation.COTISATION);
+                cotisationDTO.setDateDebutComptage(LocalDate.now().withDayOfMonth(1));
+                cotisationDTO.setIndice("messagePenalite");
+            }
         } else {
-            intervalle = calculerIntervalleMois(cotisation.getDateFin());
-            TypeCotisation typeCotisation = (intervalle <= 12) ? TypeCotisation.COTISATION : TypeCotisation.PENALITE;
+            intervalle = calculerIntervalleMois(cotisation.getCotisation().equals(TypeCotisation.AVANCE) ? getDateRetraite(idAdherent) : cotisation.getDateFin());
             cotisationDTO.setMontantcnss(getMontantCNSS(idAdherent));
-            cotisationDTO.setTypeCotisation(typeCotisation);
-            cotisationDTO.setDateDebutComptage((typeCotisation == TypeCotisation.PENALITE) ? LocalDate.now().withDayOfMonth(1) : cotisation.getDateFin());
+
+            if (cotisation.getCotisation().equals(TypeCotisation.AVANCE) || intervalle <= 12) {
+                cotisationDTO.setTypeCotisation(cotisation.getCotisation().equals(TypeCotisation.AVANCE) ? TypeCotisation.REGULARISATION : TypeCotisation.COTISATION);
+                cotisationDTO.setDateDebutComptage(getDateRetraite(idAdherent));
+                cotisationDTO.setIndice("6");
+            } else {
+                cotisationDTO.setTypeCotisation(TypeCotisation.PENALITE);
+                cotisationDTO.setDateDebutComptage(LocalDate.now().withDayOfMonth(1));
+            }
         }
+
         return cotisationDTO;
     }
 
@@ -74,7 +84,6 @@ public class TraitementCotisationImpl implements ITraitementCotisation {
         montantCotisation = Double.parseDouble(df.format(montantCotisation));
         return montantCotisation;
     }
-
     public double getMontantCNSS(Long idAdherent){
         return adherentService.findById(idAdherent)
                 .getSalaireCNSS();
